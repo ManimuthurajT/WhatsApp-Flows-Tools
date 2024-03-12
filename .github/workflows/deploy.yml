@@ -34,7 +34,7 @@ jobs:
 
       - name: Set working directory
         run: cd examples
-        working-directory: examples/endpoints/nodejs/basic
+        working-directory: examples
 
       - name: Print current directory
         run: |
