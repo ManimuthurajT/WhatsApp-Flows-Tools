@@ -28,8 +28,20 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Print current directory
+        run: |
+         echo "Current directory: $(pwd)"
+
+      - name: Set working directory
+        run: cd examples/endpoints/nodejs/basic
+        working-directory: examples/endpoints/nodejs/basic
+
+      - name: Print current directory
+        run: |
+         echo "Current directory: $(pwd)"
+
       - name: Build step
-        run: "cd ./examples/endpoint/nodejs/basics && npm install && npm run build" # 📝 Update the build command(s) if necessary
+        run: "npm install && npm run build" # 📝 Update the build command(s) if necessary
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
