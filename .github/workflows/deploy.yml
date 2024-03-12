@@ -36,4 +36,4 @@ jobs:
         with:
           project: "cold-stoat-69"
           entrypoint: "index.js" # 📝 Update the entrypoint if necessary
-          root: "." # 📝 Update the root if necessary
+          root: "./examples/endpoint/nodejs" # 📝 Update the root if necessary
