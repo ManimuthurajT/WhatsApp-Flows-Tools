@@ -32,12 +32,12 @@ jobs:
         run: |
          echo "Current directory: $(pwd)"
 
-      # - name: Set working directory
-      #   run: cd examples
-      #   working-directory: examples
-
-      - name: Change to examples directory
+      - name: Set working directory
         run: cd examples/endpoint/nodejs/basic
+        working-directory: examples/endpoint/nodejs/basic
+
+      # - name: Change to examples directory
+      #   run: cd examples/endpoint/nodejs/basic
 
       - name: Print current directory
         run: |
