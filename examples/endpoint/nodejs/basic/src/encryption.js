@@ -9,9 +9,10 @@ import crypto from "crypto";
 
 export const decryptRequest = (body, privatePem, passphrase) => {
   const { encrypted_aes_key, encrypted_flow_data, initial_vector } = body;
-
+console.log("sd123", privatePem, passphrase, body)
   const privateKey = crypto.createPrivateKey({ key: privatePem, passphrase });
   let decryptedAesKey = null;
+  console.log("privateKey", privateKey)
   try {
     // decrypt AES key created by client
     decryptedAesKey = crypto.privateDecrypt(

@@ -17,7 +17,9 @@
 
 import crypto from "crypto";
 
-const passphrase = process.argv[2];
+export function a(){
+
+const passphrase = "test"
 if (!passphrase) {
   throw new Error(
     "Passphrase is empty. Please include passphrase argument to generate the keys like: node src/keyGenerator.js {passphrase}"
@@ -50,6 +52,11 @@ PRIVATE_KEY="${keyPair.privateKey}"
 ${keyPair.publicKey}
 ************* COPY PUBLIC KEY ABOVE *************
 `);
+
+return keyPair
+
 } catch (err) {
   console.error("Error while creating public private key pair:", err);
+}
+
 }

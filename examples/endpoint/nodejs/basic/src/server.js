@@ -9,6 +9,7 @@ import express from "express";
 import { decryptRequest, encryptResponse, FlowEndpointException } from "./encryption.js";
 import { getNextScreen } from "./flow.js";
 import crypto from "crypto";
+import {a} from "./keyGenerator.js"
 
 const app = express();
 
@@ -21,7 +22,39 @@ app.use(
   }),
 );
 
-const { APP_SECRET, PRIVATE_KEY, PASSPHRASE = "", PORT = "3000" } = process.env;
+const { APP_SECRET, PASSPHRASE = "test", PORT = "3001" } = process.env;
+
+const PRIVATE_KEY = `-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: DES-EDE3-CBC,25899AC53E368F2A
+
+DEyxTBTLSKXWre3TICZ8Aks14VLPEsb9hLaQvw2xCfeEuXTyWPOlMrXm/K/4YYiD
+tsdby72NlZ+G1QO2zNM90b453XuvQLFiuRfocygP0sZkLoP8zTOP+fIdz4IAxYR8
+xWBSaoqBEUb7MLOc96n9ADczPmF/tzmxa92IRlhrw0ZyxnuQyecG3dcZv4i3OmW/
+oo80XjcKr1CReMYomJu1sIrncs3LngUUfLHpBAN5ldx/PpjVFGwdNgr8dV6YXGgt
+obAPdt3ALJklKDFquCS5d4czltmrBdeemzavr5Y1vU6ilBtg0oNMeQCOEeQfoV1s
+rBraHWNx7naoyjeT2qy6G2LzPJV5FXBdHT6qmxGJYCEARKM6OlsphQ0glwDHSiQz
++8kqIDxE2va+q+ojpooQARMq+wlwK+2nbLCRx2A3mSwd9AYLBm33ayLWRGa3K5rF
+6SE+HYTVWSMvg9mwLyvDUderIaYupZ5o9a65Bni3HCRBdk0i1lyiQzUx2ry/TAaZ
+4yzEXKmIkAQbGdtKk3NvZcb3LxMexbIcwiFpiKdwoiO6i353RyRBz/0y6+KdIVFo
+a85jamMIIT6HYAeq0yXB7xcor1uQcBKz/7eZ8RH1SZBDTeq0NoEMCC/1CE9wn0Bt
+WJfzgIE36vSIvm7AAyyTLQfbkk2CcFQGHZb4Mmxh5aniB7JYwFMMAGm9HzZEWIVY
+uC0qlhNpQUup3fpt8c5eJNdEHncFnAcVx5ady5vcRRfDR6M1TQOqy0ZvLA5lcACD
+6q8INdpJzRGAAum6wPFXRalTC1NPC+b0TQnE37n07G430xNfjoMN+rfWKbABjt3D
+qQua9wiqwKqt6P5bPR/reQG4qdxa+40jy96uDApQjGJQ3QMPazJYgY4IqGwZbHPf
+dqMVV97Tbpzh3+gWIoDSxreUCjxZDDY6kek1BLaGgzeNAhUl1F7J0nqYFlGADCoA
+tgcjWIW146H3IVbGz9Y3YFwP0PHP6ff1s32/fyoRKq5ClEqZf3dR8EgOwfFfcmk2
+UTX5XzEN1trIOES+ZxVPBqu/OTI6BXXno2rhkSm2DCjWcsv4yDm+F81zj7HTEhmf
+vIg3D6HbmhIEcEI6fDLlkeLknaRMBfzZzGbRx3hRwv3rXpIeVo3vwq3YnJbEFgi4
+87QD5wcyFYUMse0tnYIsGqefH7Tl5VJ7BtvUoBtxVrxXireJVEFX1SYWLRDf8nVA
+ziLYBCWvbanZHP4qi6Xn7I5aBiZmjLMg+B+BZw53IJN5y/x1vupdvuGnBVaUbxH4
+cpdjk4a5J8yXObcS44GXw/JJFl9BXKSTb3yfQJSWlsyyGa4mRIAIo6AqP7tDjS30
+LsMkqv5WnZ40Uh6mb1ezLWChH6K1HC2OLKUAsqLHfbmVxp+8CgXH1SqzX99z2i1d
+ci9djMK7DKR/+YJA8KPXJg8eD9QCRpY+ACNC6AA4lsoOqNS2j4aAuNQ3SeRjNAr3
+0QSUTSZ3WxPy0weXFdV3BD8to0MbElqieRWxAvucRYkU3zSEqrqPPwiukyRVPS/S
+0n7EyrMO0g+vURsklKk7NnBl66Iev+eT+qe/07k5jLNH/faPLPXvHQ==
+-----END RSA PRIVATE KEY-----
+`
 
 /*
 Example:
@@ -39,11 +72,11 @@ app.post("/", async (req, res) => {
     );
   }
 
-  if(!isRequestSignatureValid(req)) {
-    // Return status code 432 if request signature does not match.
-    // To learn more about return error codes visit: https://developers.facebook.com/docs/whatsapp/flows/reference/error-codes#endpoint_error_codes
-    return res.status(432).send();
-  }
+  // if(!isRequestSignatureValid(req)) {
+  //   // Return status code 432 if request signature does not match.
+  //   // To learn more about return error codes visit: https://developers.facebook.com/docs/whatsapp/flows/reference/error-codes#endpoint_error_codes
+  //   return res.status(432).send();
+  // }
 
   let decryptedRequest = null;
   try {
@@ -51,7 +84,7 @@ app.post("/", async (req, res) => {
   } catch (err) {
     console.error(err);
     if (err instanceof FlowEndpointException) {
-      return res.status(err.statusCode).send();
+      return res.status(421).send();
     }
     return res.status(500).send();
   }
@@ -85,6 +118,12 @@ app.post("/", async (req, res) => {
 app.get("/", (req, res) => {
   res.send(`<pre>Nothing to see here.
 Checkout README.md to start.</pre>`);
+});
+
+app.get("/createKey", (req, res) => {
+
+ const decryptedRequest = a();
+  res.send(decryptedRequest);
 });
 
 app.listen(PORT, () => {
